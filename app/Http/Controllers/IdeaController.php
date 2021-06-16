@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Idea;
+use App\Models\Vote;
 use Illuminate\Http\Request;
 
 class IdeaController extends Controller
@@ -14,9 +15,7 @@ class IdeaController extends Controller
      */
     public function index()
     {
-        return view('ideas.index', [
-            'ideas' => Idea::simplePaginate(Idea::PAGINATION_COUNT)
-        ]);
+       return view('ideas.index');
     }
 
     /**
@@ -49,7 +48,10 @@ class IdeaController extends Controller
     public function show(Idea $idea)
     {
         return view('ideas.show', [
-            'idea' => $idea
+            'idea' => $idea,
+            'votesCount' => $idea->votes()->count(),
+            'backUrl' => url()->previous() !== url()->full()
+                ? url()->previous() : route('ideas.index'),
         ]);
     }
 
